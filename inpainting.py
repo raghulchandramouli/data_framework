@@ -13,19 +13,11 @@ from PIL import Image
 config = load_config()
 
 def setup_inpainting_pipeline():
-    """
-    Sets up the StableDiffusionInpaintPipeline for image inpainting.
-    
-    Returns:
-        StableDiffusionInpaintPipeline: The initialized inpainting pipeline.
-    """
-    
     inpaint_config = config["inpainting"]
     pipe = StableDiffusionInpaintPipeline.from_pretrained(
         inpaint_config["model_name"],
-        torch_dtype=getattr(torch, inpaint_config["torch_dtype"])
+        torch_dtype=torch.float16 if inpaint_config["torch_dtype"] == "float16" else torch.float32
     )
-    
     pipe = pipe.to(inpaint_config["device"])
     return pipe
 

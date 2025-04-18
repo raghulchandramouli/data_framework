@@ -1,0 +1,24 @@
+# Ignore the dataset directory
+dataset/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment files
+.env
+venv/
+env/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore downloaded model files
+*.bin
+*.pt

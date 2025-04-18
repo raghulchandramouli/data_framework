@@ -17,8 +17,8 @@ mask:
 
 # Inpainting Configurations:
 inpainting:
-  model_name: "runwayml/stable-diffusion-inpainting" # Stable diffusion model for inpainting.
-  torch_dtype: torch.float16 # Data type for torch
+  model_name: "stabilityai/stable-diffusion-2-inpainting" # Stable diffusion model for inpainting.
+  torch_dtype: float16 # Data type for torch
   device: "cuda"
 
 # Logging Configurations:

@@ -36,9 +36,9 @@ def generate_dynamic_mask(image_path, mask_path):
         elif shape == "circle":
             center_x = random.randint(50, w - 50)
             center_y = random.randint(50, h - 50)
-            radius = random.randint(25, min(100, center_x, center_y, w - center_x, h - center_y, 75))
+            radius = random.randint(25, min(center_x, center_y, w - center_x, h - center_y, 75))
             cv2.circle(mask, (center_x, center_y), radius, 255, -1)
-            
+        
         elif shape == "ellipse":
             center_x = random.randint(50, w - 50)
             center_y = random.randint(50, h - 50)
@@ -46,46 +46,38 @@ def generate_dynamic_mask(image_path, mask_path):
             axis_length2 = random.randint(25, 75)
             angle = random.randint(0, 360)
             cv2.ellipse(mask, (center_x, center_y), (axis_length1, axis_length2), angle, 0, 360, 255, -1)
-            
+        
         elif shape == "bacteria":
             center_x = random.randint(100, w - 100)
             center_y = random.randint(100, h - 100)
             base_radius = random.randint(30, 60)
             num_points = random.randint(8, 20)
             angles = np.linspace(0, 2 * np.pi, num_points, endpoint=False)
-            
             points = []
-            
             for angle in angles:
                 noise = random.uniform(0.7, 1.3)
                 r = base_radius * noise
                 x_val = int(center_x + r * np.cos(angle))
                 y_val = int(center_y + r * np.sin(angle))
-                
                 points.append([x_val, y_val])
-
             points = np.array(points, dtype=np.int32)
             cv2.fillPoly(mask, [points], 255)
-            
         elif shape == "freeform":
             margin = 100
             cx = random.randint(margin, w - margin)
             cy = random.randint(margin, h - margin)
-            max_radies = random.randint(50, 100)
+            max_radius = random.randint(50, 100)  # Define max_radius here
             num_points = random.randint(5, 15)
             points = []
-            
             for _ in range(num_points):
                 angle = random.random() * 2 * np.pi
                 r = random.uniform(10, max_radius)
                 x_val = int(cx + r * np.cos(angle))
                 y_val = int(cy + r * np.sin(angle))
                 points.append([x_val, y_val])
-
             points = np.array(points, dtype=np.int32)
             hull = cv2.convexHull(points)
-            cv2.fillPoly(mask, [points], 255)
-            
+            cv2.fillPoly(mask, [hull], 255)
         return mask
     
     # Draw the first shape
