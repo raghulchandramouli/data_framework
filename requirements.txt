@@ -1,0 +1,9 @@
+numpy
+opencv-python
+requests
+tqdm
+pyyaml
+torch
+torchvision
+torchaudio
+diffusers
