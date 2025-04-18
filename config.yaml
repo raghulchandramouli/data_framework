@@ -1,0 +1,27 @@
+dataset:
+  dataset_dir: dataset # Directory to store the dataset
+  coco_url: http://images.cocodataset.org/zips/val2017.zip # URLs can be changed val/test/train
+  num_images_to_process: 10 # Number of images to process
+  start_index: 0 # Start index of the images to process
+
+# Path Configurations:
+paths:
+  coco_dir: dataset/val2017 # Directory for extracted COCO images
+  mask_dir: dataset/masks # Directory to store generated masks
+  inpainted_dir: dataset/inpainted # Directory to store inpainted images
+
+# Mask Generation Configurations:
+mask:
+  dilation_kernel: 15 # Kernel size for mask dilations
+  dilation_iterations: 5 # Number of dilation iterations for mask dilation
+
+# Inpainting Configurations:
+inpainting:
+  model_name: "runwayml/stable-diffusion-inpainting" # Stable diffusion model for inpainting.
+  torch_dtype: torch.float16 # Data type for torch
+  device: "cuda"
+
+# Logging Configurations:
+logging:
+  level: INFO # Logging level...
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Log message format
