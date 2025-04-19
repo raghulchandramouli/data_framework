@@ -52,7 +52,6 @@ mask:
 
 ### Running the Pipeline
 
-## Running the Pipeline
 
 ### Command Line Execution
 
