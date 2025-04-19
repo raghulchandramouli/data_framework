@@ -23,5 +23,8 @@ inpainting:
 
 # Logging Configurations:
 logging:
-  level: INFO # Logging level...
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Log message format
+  level: DEBUG # More granular logging level
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/pipeline.log # Add log file output
+  max_size: 10485760 # 10MB max file size
+  backup_count: 5 # Keep 5 backup logs

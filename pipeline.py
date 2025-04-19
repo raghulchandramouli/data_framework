@@ -22,41 +22,61 @@ def run_pipeline(config_path="config.yaml"):
     config = load_config(config_path)
     logger = setup_logging(config.get("logging", {}))
 
-    # Download and extract dataset
-    logger.info("Downloading and extracting dataset...")
-    download_and_extract_dataset()
+    logger.info("Starting pipeline execution")
 
-    # Setup inpainting pipeline
-    logger.info("Setting up inpainting pipeline...")
-    pipe = setup_inpainting_pipeline()
+    try:
+        # Download and extract dataset
+        logger.info("Starting dataset download and extraction process")
+        logger.debug(f"Downloading dataset from {config['dataset']['coco_url']}")
+        download_and_extract_dataset()
+        logger.info("Dataset download and extraction completed successfully")
+        logger.debug(f"Extracted dataset available at {config['paths']['coco_dir']}")
 
-    # Process images
-    logger.info("Generating masks and performing inpainting...")
-    coco_dir = config["paths"]["coco_dir"]
-    mask_dir = config["paths"]["mask_dir"]
-    inpainted_dir = config["paths"]["inpainted_dir"]
-    num_images_to_process = config["dataset"]["num_images_to_process"]
-    start_index = config["dataset"]["start_index"]
+        # Setup inpainting pipeline
+        logger.info("Initializing inpainting pipeline")
+        logger.debug(f"Using model: {config['inpainting']['model_name']}")
+        pipe = setup_inpainting_pipeline()
+        logger.info("Inpainting pipeline setup completed")
+        logger.debug(f"Pipeline initialized with device: {config['inpainting']['device']}")
 
-    os.makedirs(mask_dir, exist_ok=True)
-    os.makedirs(inpainted_dir, exist_ok=True)
+        # Process images
+        logger.info("Starting image processing pipeline")
+        logger.debug(f"Processing {num_images_to_process} images starting from index {start_index}")
 
-    # Get list of images to process
-    image_files = [f for f in os.listdir(coco_dir) if f.endswith((".jpg", ".png"))]
-    image_files = image_files[start_index:start_index + num_images_to_process]
+        for idx, image_file in enumerate(image_files):
+            logger.debug(f"Processing image {idx + 1}: {image_file}")
+            logger.debug(f"Source image path: {image_path}")
+            logger.debug(f"Mask output path: {mask_path}")
+            logger.debug(f"Inpainted output path: {inpainted_path}")
+            image_path = os.path.join(coco_dir, image_file)
+            mask_path = os.path.join(mask_dir, f"mask_{image_file}")
+            inpainted_path = os.path.join(inpainted_dir, f"inpainted_{image_file}")
 
-    for image_file in image_files:
-        image_path = os.path.join(coco_dir, image_file)
-        mask_path = os.path.join(mask_dir, f"mask_{image_file}")
-        inpainted_path = os.path.join(inpainted_dir, f"inpainted_{image_file}")
+            logger.info(f"Processing image {idx + 1}/{len(image_files)}: {image_file}")
 
-        # Generate mask
-        generate_dynamic_mask(image_path, mask_path)
+            try:
+                # Generate mask
+                logger.debug(f"Generating mask for {image_file}")
+                generate_dynamic_mask(image_path, mask_path)
+                logger.debug(f"Mask generated successfully for {image_file}")
 
-        # Perform inpainting
-        inpaint_image(pipe, image_path, mask_path, inpainted_path)
+                # Perform inpainting
+                logger.debug(f"Starting inpainting for {image_file}")
+                inpaint_image(pipe, image_path, mask_path, inpainted_path)
+                logger.debug(f"Inpainting completed for {image_file}")
 
-    logger.info("Pipeline execution completed.")
+            except Exception as e:
+                logger.error(f"Error processing image {image_file}: {str(e)}")
+                continue
+
+            if (idx + 1) % 5 == 0:
+                logger.info(f"Processed {idx + 1} images out of {len(image_files)}")
+
+    except Exception as e:
+        logger.error(f"Pipeline execution failed: {str(e)}")
+        raise
+
+    logger.info("Pipeline execution completed successfully")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
