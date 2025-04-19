@@ -3,6 +3,8 @@ Utility Module
 
 This module provides helper functions for common tasks such as file handling,
 logging, and error management.
+
+Data Sanity Checking is done in this Module as well.
 """
 
 import os
@@ -47,3 +49,29 @@ def log_info(message: str) -> None:
         message (str): Informational message to log.
     """
     logging.info(message)
+
+
+def filter_images_by_shape(image_paths: List[str]) -> List[str]:
+    """
+    Filters images by comparing their shapes to the first image's shape.
+
+    Args:
+        image_paths (List[str]): List of image file paths.
+
+    Returns:
+        List[str]: List of image paths with matching shapes.
+    """
+    import cv2
+    valid_images = []
+    reference_shape = None
+
+    for img_path in image_paths:
+        img = cv2.imread(img_path)
+        if img is not None:
+            if reference_shape is None:
+                reference_shape = img.shape
+                valid_images.append(img_path)
+            elif img.shape == reference_shape:
+                valid_images.append(img_path)
+
+    return valid_images
