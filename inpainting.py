@@ -13,6 +13,26 @@ from PIL import Image
 config = load_config()
 
 def setup_inpainting_pipeline():
+    
+    """
+    Sets up and initializes the StableDiffusionInpaintPipeline for image inpainting.
+    
+    This function:
+    1. Loads inpainting configuration from the config file
+    2. Initializes the pipeline with the specified model
+    3. Configures the model's precision (float16 or float32)
+    4. Moves the model to the specified device (CPU/GPU)
+    
+    Returns:
+        StableDiffusionInpaintPipeline: Initialized inpainting pipeline ready for use
+        
+    Configuration Requirements:
+        The config file should contain an "inpainting" section with:
+        - "model_name": Name/path of the pretrained model
+        - "torch_dtype": Precision setting ("float16" or "float32")
+        - "device": Device to run the model on ("cuda" or "cpu")
+    """
+    
     inpaint_config = config["inpainting"]
     pipe = StableDiffusionInpaintPipeline.from_pretrained(
         inpaint_config["model_name"],
@@ -22,6 +42,7 @@ def setup_inpainting_pipeline():
     return pipe
 
 def inpaint_image(pipe, image_path, mask_path, output_path):
+    
     """
     Performs inpainting on an image using the provided pipeline.
 
@@ -31,6 +52,7 @@ def inpaint_image(pipe, image_path, mask_path, output_path):
         mask_path (str): Path to the mask image.
         output_path (str): Path to save the inpainted image.
     """
+    
     image = Image.open(image_path).convert("RGB")
     mask = Image.open(mask_path).convert("L")
     

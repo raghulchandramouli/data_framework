@@ -13,6 +13,7 @@ from config import load_config
 config = load_config()
 
 def generate_dynamic_mask(image_path, mask_path):
+    
     """
     Generates a dynamic binary mask using random geometric shapes.
     
@@ -27,6 +28,24 @@ def generate_dynamic_mask(image_path, mask_path):
     shape_types = ["rectangle", "circle", "ellipse", "bacteria", "freeform"]
     
     def draw_shape(shape, mask):
+        """
+        Draws a specified geometric shape on the mask.
+
+        Args:
+            shape (str): Type of shape to draw. Options: 'rectangle', 'circle', 'ellipse', 'bacteria', 'freeform'.
+            mask (numpy.ndarray): Binary mask array to draw the shape on.
+
+        Returns:
+            numpy.ndarray: Modified mask with the drawn shape.
+
+        Shape Details:
+            - Rectangle: Random position and size within image boundaries.
+            - Circle: Random center and radius within image boundaries.
+            - Ellipse: Random center, axes lengths, and rotation angle.
+            - Bacteria: Organic shape with random points around a center.
+            - Freeform: Irregular shape using convex hull of random points.
+        """
+        
         if shape == "rectangle":
             x = random.randint(50, max(50, w - 150))
             y = random.randint(50, max(50, h - 150))
@@ -54,6 +73,7 @@ def generate_dynamic_mask(image_path, mask_path):
             num_points = random.randint(8, 20)
             angles = np.linspace(0, 2 * np.pi, num_points, endpoint=False)
             points = []
+            
             for angle in angles:
                 noise = random.uniform(0.7, 1.3)
                 r = base_radius * noise
@@ -62,6 +82,7 @@ def generate_dynamic_mask(image_path, mask_path):
                 points.append([x_val, y_val])
             points = np.array(points, dtype=np.int32)
             cv2.fillPoly(mask, [points], 255)
+            
         elif shape == "freeform":
             margin = 100
             cx = random.randint(margin, w - margin)
@@ -69,12 +90,14 @@ def generate_dynamic_mask(image_path, mask_path):
             max_radius = random.randint(50, 100)  # Define max_radius here
             num_points = random.randint(5, 15)
             points = []
+            
             for _ in range(num_points):
                 angle = random.random() * 2 * np.pi
                 r = random.uniform(10, max_radius)
                 x_val = int(cx + r * np.cos(angle))
                 y_val = int(cy + r * np.sin(angle))
                 points.append([x_val, y_val])
+                
             points = np.array(points, dtype=np.int32)
             hull = cv2.convexHull(points)
             cv2.fillPoly(mask, [hull], 255)
