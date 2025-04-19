@@ -24,6 +24,7 @@ def download_and_extract_dataset():
     
     dataset_dir = config["dataset"]["dataset_dir"]
     coco_url = config["dataset"]["coco_url"]
+    stop_index = config["dataset"]["stop_index"]
     coco_zip = os.path.join(dataset_dir, "coco_val2017.zip")
     coco_dir = config["paths"]["coco_dir"]
     

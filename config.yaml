@@ -3,6 +3,7 @@ dataset:
   coco_url: http://images.cocodataset.org/zips/val2017.zip # URLs can be changed val/test/train
   num_images_to_process: 10 # Number of images to process
   start_index: 0 # Start index of the images to process
+  stop_index: 10 # Stop index of the images to process
 
 # Path Configurations:
 paths:
