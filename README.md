@@ -20,7 +20,7 @@ A sophisticated framework for generating dynamic masks and performing image inpa
 
 1. Clone the repository:
    ```bash
-   git clone [repository-url]
+   git clone https://github.com/raghulchandramouli/data_framework
    cd data_framework
    ```
 
@@ -51,6 +51,26 @@ mask:
 ## Usage
 
 ### Running the Pipeline
+
+## Running the Pipeline
+
+### Command Line Execution
+
+You can run the pipeline directly from the command line:
+
+```bash
+python pipeline.py
+```
+
+To specify a custom configuration file:
+
+```bash
+python pipeline.py custom_config.yaml
+```
+
+### Python Script Execution
+
+Alternatively, you can import and run the pipeline in a Python script:
 
 ```python
 from pipeline import run_pipeline
