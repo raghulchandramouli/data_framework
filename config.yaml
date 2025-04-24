@@ -7,9 +7,9 @@ dataset:
 
 # Path Configurations:
 paths:
-  coco_dir: dataset/test2017 # Directory for extracted COCO images
-  mask_dir: dataset/masks # Directory to store generated masks
-  inpainted_dir: dataset/inpainted # Directory to store inpainted images
+  coco_dir:  # Directory for extracted COCO images
+  mask_dir:  # Directory to store generated masks
+  inpainted_dir:  # Directory to store inpainted images
 
 # Mask Generation Configurations:
 mask:
